@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.sys.dao.SequenceDao">
+	
+	<select id="get" resultType="Sequence" flushCache="true">
+		SELECT
+			*
+		FROM sys_sequence
+		WHERE name = #{name}
+	</select>
+	
+	<select id="findList" resultType="Sequence">
+		SELECT
+			*
+		FROM sys_sequence
+		WHERE 1 = 1
+		ORDER BY name DESC
+	</select>
+	
+	<select id="findAllList" resultType="Sequence">
+		SELECT
+			*
+		FROM sys_sequence
+		ORDER BY name DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO sys_sequence (
+			name,
+			next_id,
+			update_date
+		) VALUES (
+			#{name},
+			#{nextId},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_sequence
+		SET next_id = (next_id + #{step}),
+			update_date = #{updateDate}
+		WHERE
+			name = #{name}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_sequence  
+		WHERE name = #{name}
+	</update>
+	
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.room.dao.DataAuditVoDao">
+
+	<sql id="findDataAuditList">
+		SELECT
+			speaker_video.id AS 'id',
+			speaker_video.status AS 'status',
+			speaker_video.name AS 'dataName', 
+			speaker.company AS 'speaker.company',
+			room.name AS 'room.name',
+			room.id AS 'room.id',
+			video.create_date AS 'createDate',
+			video.source_id AS 'sourceId',
+			'1' AS 'type'
+		FROM live_speaker_video speaker_video,
+			 live_speaker speaker,
+			 live_room_video video,
+			 live_room room
+		WHERE speaker_video.speaker_id = speaker.id
+		AND video.room_id = room.id
+		AND room.speaker_id = speaker.id
+		AND video.source_id = speaker_video.id
+		UNION
+		SELECT
+			speaker_data.id AS 'id',
+			speaker_data.status AS 'status',
+			speaker_data.name AS 'dataName', 
+			speaker.company AS 'speaker.company',
+			room.name AS 'room.name',
+			room.id AS 'room.id',
+			data.create_date AS 'createDate',
+			data.source_id AS 'sourceId',
+			'2' AS 'type'
+		FROM live_speaker_data speaker_data,
+			 live_speaker speaker,
+			 live_room_data data,
+			 live_room room
+		WHERE speaker_data.speaker_id = speaker.id
+		AND data.room_id = room.id
+		AND room.speaker_id = speaker.id
+		AND data.source_id = speaker_data.id
+		UNION
+		SELECT
+			speaker_speech.id AS 'id',
+			speaker_speech.status AS 'status',
+			speaker_speech.name AS 'dataName', 
+			speaker.company AS 'speaker.company',
+			room.name AS 'room.name',
+			room.id AS 'room.id',
+			speech.create_date AS 'createDate',
+			speech.source_id AS 'sourceId',
+			'3' AS 'type'
+		FROM live_speaker_speech speaker_speech,
+			 live_speaker speaker,
+			 live_room_speech speech,
+			 live_room room
+		WHERE speaker_speech.speaker_id = speaker.id
+		AND speech.room_id = room.id
+		AND room.speaker_id = speaker.id
+		AND speech.source_id = speaker_speech.id
+	</sql>
+	
+	<select id="findList" resultType="DataAuditVo">
+		SELECT basic.* 
+		FROM (
+			<include refid="findDataAuditList"/>
+		) basic
+		<where>
+			<if test="searchType == 1">
+				<if test="name != null and name != ''">
+		  			AND	IFNULL(basic.`room.name`,'') LIKE CONCAT('%', #{name}, '%')
+				</if>
+			</if>
+			<if test="searchType == 2">
+				<if test="name != null and name != ''">
+		  			AND	IFNULL(basic.`speaker.company`,'') LIKE CONCAT('%', #{name}, '%')
+				</if>
+			</if>
+			<if test="status != null">
+				AND basic.status = #{status}
+			</if>
+		</where>
+		ORDER BY basic.createDate DESC
+	</select>
+
+</mapper>

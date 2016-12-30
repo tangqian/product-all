@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.report.dao.ReportDataDownloadDao">
+	
+	<select id="get" resultType="ReportDataDownload">
+		SELECT
+			*
+		FROM live_report_data_download
+		WHERE id = #{id}
+	</select>
+
+	<select id="getOne" resultType="ReportDataDownload">
+		SELECT
+		*
+		FROM live_report_data_download
+		WHERE
+			room_id = #{roomId}
+		AND type = #{type}
+		AND data_id = #{dataId}
+		AND user_id = #{userId}
+	</select>
+	
+	<select id="findList" resultType="ReportDataDownload">
+		SELECT
+			*
+		FROM live_report_data_download
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="ReportDataDownload">
+		SELECT
+			*
+		FROM live_report_data_download
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_report_data_download (
+			id,
+			room_id,
+			name,
+			type,
+			data_id,
+			user_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{name},
+			#{type},
+			#{dataId},
+			#{userId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_report_data_download
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="dataId != null">data_id = #{dataId},</if>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_report_data_download  
+		WHERE id = #{id}
+	</update>
+	
+	<select id="countDownloadAudienceRoomId" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1) AS 'downloadAudienceCount'
+		FROM
+			live_report_data_download download,
+			live_audience audience,
+			live_user user
+		WHERE
+			download.user_id = audience.id
+		AND user.id = audience.id
+		AND user.type = 1
+		AND audience.company NOT LIKE '%ofweek%'
+		AND download.room_id = #{roomId}
+		AND download.type = #{type}
+	</select>
+	
+</mapper>

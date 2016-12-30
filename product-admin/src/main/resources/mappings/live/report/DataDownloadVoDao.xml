@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.report.dao.DataDownloadVoDao">
+
+	<select id="findList" resultType="DataDownloadVo">
+		SELECT 
+			basic.`room.name`,
+			basic.`speaker.company`,
+			sum(basic.attention) AS 'attentionCount',
+			sum(basic.dataDownload) AS 'dataDownloadCount',
+			GROUP_CONCAT(IFNULL(basic.exportAttentionId, '')) AS 'exportAttentionIds'
+				FROM (
+				SELECT 
+					room.name AS 'room.name',
+					room.start_time AS 'room.startTime',
+					speaker.company AS 'speaker.company',
+					count(DISTINCT download.user_id) AS 'attention',
+					0 AS 'dataDownload',
+					GROUP_CONCAT(DISTINCT download.user_id) AS 'exportAttentionId'
+				FROM live_report_data_download download
+				LEFT JOIN live_room room ON download.room_id = room.id
+				LEFT JOIN live_speaker speaker ON room.speaker_id = speaker.id
+				LEFT JOIN live_user user ON download.user_id = `user`.id
+				LEFT JOIN live_audience audience ON audience.id = `user`.id
+				WHERE download.type = 1 AND `user`.type = 1  AND audience.company NOT LIKE '%smartlifein%'
+				GROUP BY speaker.company
+			UNION
+				SELECT 
+					room.name AS 'room.name',
+					room.start_time AS 'room.startTime',
+					speaker.company AS 'speaker.company',
+					0 AS 'attention',
+					count(download.user_id) AS 'dataDownload',
+					'' AS 'exportAttentionId'
+				FROM live_report_data_download download
+				LEFT JOIN live_room room ON download.room_id = room.id
+				LEFT JOIN live_speaker speaker ON room.speaker_id = speaker.id
+				LEFT JOIN live_user user ON download.user_id = `user`.id
+				LEFT JOIN live_audience audience ON audience.id = `user`.id
+				WHERE download.type = 1 AND audience.company NOT LIKE '%smartlifein%'
+				GROUP BY speaker.company
+			) basic
+		<include refid="findCriteriaSQL"/>
+		GROUP BY basic.`speaker.company`
+		ORDER BY basic.`room.startTime` DESC
+	</select>
+
+	<sql id="findCriteriaSQL">
+		<where>
+			<if test="searchType == 1">
+				<if test="name != null and name != ''">
+		  			AND	IFNULL(basic.`room.name`,'') LIKE CONCAT('%', #{name}, '%')
+				</if>
+			</if>
+			<if test="searchType == 2">
+				<if test="name != null and name != ''">
+		  			AND	IFNULL(basic.`speaker.company`,'') LIKE CONCAT('%', #{name}, '%')
+				</if>
+			</if>
+		</where>
+	</sql>
+
+</mapper>

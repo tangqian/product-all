@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.room.dao.RoomBlacklistDao">
+	
+	<select id="get" resultType="RoomBlacklist">
+		SELECT
+			*
+		FROM live_room_blacklist
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomBlacklist">
+		SELECT
+			blacklist.*, 
+			room.`name` AS 'room.name',
+			user.account AS 'user.account'
+		FROM
+			live_room_blacklist blacklist,
+			live_room room,
+			live_user user
+		WHERE
+			blacklist.room_id = room.id
+		AND blacklist.user_id = `user`.id
+		AND `user`.type = 1
+		<if test="user != null">
+	  		AND	IFNULL(user.`account`,'') LIKE CONCAT('%', #{user.account}, '%')
+		</if>
+		ORDER BY blacklist.create_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="RoomBlacklist">
+		SELECT
+			*
+		FROM live_room_blacklist
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findBlacklistForObj" resultType="RoomBlacklist">
+		SELECT
+			*
+		FROM live_room_blacklist
+		<where>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="roomId != null">
+				AND room_id = #{roomId}
+			</if>
+		</where>
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_blacklist (
+			id,
+			room_id,
+			user_id,
+			reason,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{userId},
+			#{reason},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_blacklist
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="reason != null">reason = #{reason},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_blacklist  
+		WHERE ID= #{id}
+	</update>
+	
+</mapper>

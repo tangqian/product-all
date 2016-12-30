@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.room.dao.RoomSpeechPublicDao">
+	
+	<select id="get" resultType="RoomSpeechPublic">
+		SELECT
+			*
+		FROM live_room_speech_public
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomSpeechPublic">
+		SELECT
+			*
+		FROM live_room_speech_public
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(NAME,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findAllList" resultType="RoomSpeechPublic">
+		SELECT
+			*
+		FROM live_room_speech_public
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findRoomSpeakerSpeechForConditions" resultType="RoomSpeechPublic">
+		SELECT
+			speaker_speech.name,
+			speaker_speech.file_id,
+			speech.room_id,
+			speech.source_id
+		FROM
+			live_speaker_speech speaker_speech,
+			live_room_speech speech
+		WHERE
+			speaker_speech.id = speech.source_id
+		AND speaker_speech.id = #{id}
+		AND speech.room_id = #{roomId}
+	</select>
+	
+	<select id="findRoomSpeechPublicForConditions" resultType="RoomSpeechPublic">
+		SELECT
+			*
+		FROM live_room_speech_public
+		WHERE 
+			source_id = #{sourceId}
+		AND room_id = #{roomId}
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_speech_public (
+			id,
+			room_id,
+			source_id,
+			name,
+			file_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{sourceId},
+			#{name},
+			#{fileId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_speech_public
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="sourceId != null">source_id = #{sourceId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_speech_public  
+		WHERE ID= #{id}
+	</update>
+	
+</mapper>

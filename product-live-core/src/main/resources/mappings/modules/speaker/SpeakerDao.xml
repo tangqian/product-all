@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.speaker.dao.SpeakerDao">
+	
+	<select id="get" resultType="Speaker">
+		SELECT
+			*
+		FROM live_speaker
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Speaker">
+		SELECT
+			*
+		FROM live_speaker
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="Speaker">
+		SELECT
+			*
+		FROM live_speaker
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_speaker (
+			id,
+			company,
+			address,
+			industry,
+			name,
+			job,
+			logo_id,
+			sex,
+			department,
+			mobile_phone,
+			telephone,
+			fax,
+			url,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{company},
+			#{address},
+			#{industry},
+			#{name},
+			#{job},
+			#{logoId},
+			#{sex},
+			#{department},
+			#{mobilePhone},
+			#{telephone},
+			#{fax},
+			#{url},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_speaker
+		<set>
+			<if test="company != null">company = #{company},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="industry != null">industry = #{industry},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="job != null">job = #{job},</if>
+			<if test="logoId != null">logo_id = #{logoId},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="department != null">department = #{department},</if>
+			<if test="mobilePhone != null">mobile_phone = #{mobilePhone},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="fax != null">fax = #{fax},</if>
+			<if test="url != null">url = #{url},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_speaker  
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getSpeakerForId" resultType="Speaker">
+		SELECT
+			speaker.id AS 'id',
+			speaker.name AS 'name',
+			user.account AS 'user.account'
+		FROM
+			live_speaker speaker,
+			live_user user
+		WHERE
+			speaker.id = user.id
+		AND speaker.id = #{speakerId}
+	</select>
+
+	<select id="getLiveSpeakerForId" resultType="Speaker">
+		SELECT
+			speaker.*,
+		user.email AS 'email'
+		FROM live_speaker speaker,
+			live_user user
+		WHERE speaker.id = user.id AND user.type = 3
+			AND speaker.id = #{speakerId}
+	</select>
+	
+</mapper>

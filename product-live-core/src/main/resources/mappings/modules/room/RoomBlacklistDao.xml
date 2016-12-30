@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.room.dao.RoomBlacklistDao">
+	
+	<select id="get" resultType="RoomBlacklist">
+		SELECT
+			*
+		FROM live_room_blacklist
+		WHERE id = #{id}
+	</select>
+
+	<select id="getByRoomUserId" resultType="RoomBlacklist">
+		SELECT
+		*
+		FROM live_room_blacklist
+		WHERE room_id = #{roomId} AND user_id = #{userId}
+	</select>
+
+	<select id="findList" resultType="RoomBlacklist">
+		SELECT
+		*
+		FROM live_room_blacklist
+		WHERE 1 = 1
+		<if test="roomId != null and roomId != ''">AND room_id = #{roomId}</if>
+		<if test="userId != null and userId != ''">AND user_id = #{userId}</if>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="RoomBlacklist">
+		SELECT
+			*
+		FROM live_room_blacklist
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_blacklist (
+			id,
+			room_id,
+			user_id,
+			reason,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{userId},
+			#{reason},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_blacklist
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="reason != null">reason = #{reason},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_blacklist  
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

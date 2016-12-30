@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.room.dao.RoomReviewDataDao">
+	
+	<select id="get" resultType="RoomReviewData">
+		SELECT
+			*
+		FROM live_room_review_data
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomReviewData">
+		SELECT
+			*
+		FROM live_room_review_data
+		WHERE 1 = 1
+		<if test="type != null">AND type = #{type}</if>
+		<if test="status != null">AND status = #{status}</if>
+		<if test="roomId != null and roomId != ''">AND room_id = #{roomId}</if>
+		ORDER BY sort
+	</select>
+	
+	<select id="findAllList" resultType="RoomReviewData">
+		SELECT
+			*
+		FROM live_room_review_data
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_review_data (
+			id,
+			room_id,
+			name,
+			file_id,
+			sort,
+			type,
+			mediaId,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{name},
+			#{fileId},
+			#{sort},
+			#{type},
+			#{mediaId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_review_data
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="createDate != null">create_date = #{createDate},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_review_data  
+		WHERE id = #{id}
+	</update>
+
+	<select id="findReviewListByMediaId" resultType="RoomReviewData">
+		SELECT
+		*
+		FROM live_room_review_data
+		WHERE 1=1
+		<if test="mediaId != null">AND mediaId = #{mediaId}</if>
+	</select>
+
+</mapper>

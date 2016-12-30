@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.report.dao.ReportUserPresentDao">
+	
+	<select id="get" resultType="ReportUserPresent">
+		SELECT
+			*
+		FROM live_report_user_present
+		WHERE id = #{id}
+	</select>
+
+	<select id="getByRoomUser" resultType="ReportUserPresent">
+		SELECT
+		*
+		FROM live_report_user_present
+		WHERE room_id = #{roomId}
+		AND user_id = #{userId}
+	</select>
+	
+	<select id="findList" resultType="ReportUserPresent">
+		SELECT
+			*
+		FROM live_report_user_present
+		WHERE 1 = 1
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="ReportUserPresent">
+		SELECT
+			*
+		FROM live_report_user_present
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_report_user_present (
+			id,
+			room_id,
+			user_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{userId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_report_user_present
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="userId != null">user_id = #{userId},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_report_user_present  
+		WHERE id = #{id}
+	</update>
+	
+	<select id="countAllAudienceForRoomId" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			live_report_user_present present,
+			live_audience audience,
+			live_user user
+		WHERE
+			present.user_id = user.id
+		AND audience.id = user.id
+		AND user.type = 1
+		AND audience.company NOT LIKE '%ofweek%'
+		AND present.room_id = #{roomId}
+	</select>
+	
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.report.dao.ReportVisitorPresentDao">
+	
+	<select id="get" resultType="ReportVisitorPresent">
+		SELECT
+			*
+		FROM live_report_visitor_present
+		WHERE id = #{id}
+	</select>
+
+	<select id="getByRoomVisitor" resultType="ReportVisitorPresent">
+		SELECT
+		*
+		FROM live_report_visitor_present
+		WHERE room_id = #{roomId}
+		AND visitor_id = #{visitorId}
+	</select>
+	
+	<select id="findList" resultType="ReportVisitorPresent">
+		SELECT
+			*
+		FROM live_report_visitor_present
+		WHERE 1 = 1
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="ReportVisitorPresent">
+		SELECT
+			*
+		FROM live_report_visitor_present
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_report_visitor_present (
+			id,
+			room_id,
+			visitor_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{visitorId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_report_visitor_present
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="visitorId != null">visitor_id = #{visitorId},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_report_visitor_present  
+		WHERE id = #{id}
+	</update>
+	
+	<select id="countRoomVisitorForRoomId" resultType="java.lang.Integer">
+		SELECT
+			count(present.id) AS 'visitorCount'
+		FROM
+			live_report_visitor_present present,
+			live_visitor visitor
+		WHERE
+			present.visitor_id = visitor.id
+		AND present.room_id = #{roomId}
+	</select>
+	
+</mapper>

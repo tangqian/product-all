@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.base.dao.LiveUserDao">
+	
+	<select id="get" resultType="LiveUser">
+		SELECT
+			*
+		FROM live_user
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="LiveUser">
+		SELECT
+			*
+		FROM live_user
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(NAME,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findAllList" resultType="LiveUser">
+		SELECT
+			*
+		FROM live_user
+		ORDER BY ID DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_user (
+			id,
+			account,
+			email,
+			password,
+			type,
+			status,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{account},
+			#{email},
+			#{password},
+			#{type},
+			#{status},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_user
+		<set>
+			<if test="account != null and account != ''">account = #{account},</if>
+			<if test="email != null and email != ''">email = #{email},</if>
+			<if test="password != null and password != ''">password = #{password},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_user  
+		WHERE ID= #{id}
+	</update>
+	
+	<select id="getLiveUserForAccount" resultType="LiveUser">
+		SELECT
+			*
+		FROM live_user
+		WHERE account = #{account} AND type = #{type}
+	</select>
+	
+</mapper>

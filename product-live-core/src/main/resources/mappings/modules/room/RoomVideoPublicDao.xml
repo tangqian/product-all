@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.room.dao.RoomVideoPublicDao">
+	
+	<select id="get" resultType="RoomVideo">
+		SELECT
+			*
+		FROM live_room_video_public
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomVideo">
+		SELECT
+			*
+		FROM live_room_video_public
+		WHERE 1 = 1
+		<if test="roomId != null and roomId != ''">AND room_id = #{roomId}</if>
+		ORDER BY name
+	</select>
+	
+	<select id="findAllList" resultType="RoomVideo">
+		SELECT
+			*
+		FROM live_room_video_public
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_video_public (
+			id,
+			room_id,
+			source_id,
+			name,
+			detail,
+			file_id,
+			cover_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{sourceId},
+			#{name},
+			#{detail},
+			#{fileId},
+			#{coverId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_video_public
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="sourceId != null">source_id = #{sourceId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="detail != null">detail = #{detail},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="coverId != null">cover_id = #{coverId},</if>
+			<if test="createDate != null">create_date = #{createDate},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_video_public  
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteDatas">
+		DELETE FROM live_room_video_public
+		WHERE source_id in
+		<foreach collection="srcIds" item="item" separator="," open="(" close=")" index="index">
+			#{item}
+		</foreach>
+	</update>
+	
+	<select id="getRoomVideoPub" resultType="RoomVideo">
+		SELECT
+			*
+		FROM
+			live_room_video_public
+		WHERE
+			room_id = #{roomId}
+		AND source_id = #{source.id}
+	</select>
+	
+	<update id="deleteRoomVideoPub">
+		DELETE FROM live_room_video_public
+		WHERE room_id = #{roomId}
+		AND source_id = #{source.id}
+	</update>
+</mapper>

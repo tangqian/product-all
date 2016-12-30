@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.room.dao.RoomDataPublicDao">
+	
+	<select id="get" resultType="RoomDataPublic">
+		SELECT
+			*
+		FROM live_room_data_public
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomDataPublic">
+		SELECT
+			*
+		FROM live_room_data_public
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(NAME,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findAllList" resultType="RoomDataPublic">
+		SELECT
+			*
+		FROM live_room_data_public
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findRoomSpeakerDataForConditions" resultType="RoomDataPublic">
+		SELECT
+			speaker_data.name,
+			speaker_data.file_id,
+			data.room_id,
+			data.source_id,
+			data.sort
+		FROM
+			live_speaker_data speaker_data,
+			live_room_data data
+		WHERE
+			speaker_data.id = data.source_id
+		AND speaker_data.id = #{id}
+		AND data.room_id = #{roomId}
+	</select>
+	
+	<select id="findRoomDataPublicForConditions" resultType="RoomDataPublic">
+		SELECT
+			*
+		FROM live_room_data_public
+		WHERE 
+			source_id = #{sourceId}
+		AND room_id = #{roomId}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO live_room_data_public (
+			id,
+			room_id,
+			source_id,
+			name,
+			file_id,
+			sort,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{sourceId},
+			#{name},
+			#{fileId},
+			#{sort},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_data_public
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="sourceId != null">source_id = #{sourceId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_data_public  
+		WHERE ID= #{id}
+	</update>
+	
+	<update id="">
+	
+	</update>
+	
+</mapper>

@@ -1,0 +1,30 @@
+@charset "UTF-8";
+.header{height: .96rem;line-height: .96rem;background: #c60000;position: relative;}
+.header a{position: absolute;display: block;height: .46rem;background-image: url(../img/icon.png);background-repeat: no-repeat;background-size: 5.06rem .46rem;top: .28rem;}
+.header .list{left: .24rem;width: .52rem;}
+.header .userLogin{right: .24rem;background-position: -.52rem 0;width: .46rem;}
+.header .title{text-align: center;padding-top: -.24rem;}
+.header .title img{width: 2.48rem;}
+.content{padding: 0 .24rem;}
+
+.content li{position: relative;border-bottom: .05rem solid #dfdfdf;padding: .6rem .2rem .2rem .2rem;}
+.content li .nav{display: block;position: absolute;width: 2.17rem;}
+.content li .nav img{width: 100%;}
+.content li .nav span{position: absolute;height: .3rem;display: block;line-height: .3rem;color: #fff;font-size: .22rem;text-align: center;left: .1rem;top: -.15rem;background-image:url(../img/icon.png);background-repeat: no-repeat;background-size: 5.06rem .46rem;}
+.living{width: 1rem;background-position: -1.45rem 0;}
+.loading{width: 1.18rem;background-position: -2.46rem 0;}
+.end{width: 1.18rem;background-position: -3.66rem 0;}
+
+.content .main{margin-left: 2.36rem;min-height: 1.6rem;padding-bottom: .48rem;position: relative;}
+.content .main .linkBooth{font-size: .32rem;color: #333;}
+.content .main p{font-size: .2rem;color: #555;margin-top: .08rem;line-height: .24rem;}
+.content .main p span{display: block;width: .21rem;height: .21rem;background: url(../img/icon.png) no-repeat -.98rem 0;background-size: 5.06rem .46rem;float: left;margin-right: .04rem;}
+.content .main .goLink{position: absolute;bottom: 0;display: block;height: .35rem;line-height: .35rem;width: 1.3rem;text-align: center;background: #cc0000;font-size: .2rem;color: #fff;right: 0;border-radius: .04rem;}
+.content_del{padding-top: .15rem;border-top: 1px solid #dfdfdf;margin-top: .2rem;font-size: .2rem;color: #555;line-height: .24rem;}
+.content_del span{display: inline-block;vertical-align: middle;background-image: url(../img/icon.png);background-size: 5.06rem .46rem;margin-right: .08rem;}
+.content_del span:first-child{width: .22rem;height: .24rem;background-position: -.98rem -.23rem}
+.content_del span:last-child{width: .24rem;height: .24rem;background-position: -1.21rem 0rem;margin-left: .16rem;}
+.loadMore{text-align: center;padding: .4rem 0 .3rem 0;height: 1.02rem;line-height: .32rem;color: #858585;font-size: .2rem;}
+.loadMore span{display: inline-block;width: .2rem;height: .32rem;background: url(../img/icon.png) no-repeat -4.86rem 0;background-size: 5.06rem .46rem;vertical-align: middle;margin-right: .12rem;}
+
+

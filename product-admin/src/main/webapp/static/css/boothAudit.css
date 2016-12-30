@@ -1,0 +1,136 @@
+.xin {
+    color: #e62129;
+    font-size: 14px;
+    margin-right: 7px;
+}
+*{
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+.stand_main_right{
+    width:783px;
+    float: right;
+}
+.filePro-wrap{
+    overflow: hidden;
+}
+.video-list li{
+    float: left;
+    display: inline;
+    width: 162px;
+    margin-right:30px;
+    margin-bottom:5px;
+}
+.video-list li p{
+    text-align: center;
+    font-size:12px;
+    line-height:26px;
+}
+.video-list li img{
+    width:86px;
+    height:78px;
+    border:1px solid #ccc;
+}
+.pass{color:#008000;}
+.nopass,.wait{color:#c00;}
+.atlas-list li{
+    float: left;
+    display: inline;
+    height:130px;
+    width: 106px;
+    padding-right:34px;
+    margin-bottom:20px;
+    vertical-align:top;
+    font-size:12px;
+}
+.atlas-list li input,.chk{
+    width:13px;
+    height:13px;
+}
+.atlas-list li img{
+    border:1px solid #ccc;
+    float: right;
+}
+.atlas-list li span{
+    height:12px;
+    display: block;
+}
+.atlas-list li p{
+    width:82px;
+}
+.atlas-list li label{
+    font-size:12px;
+}
+.c000 {
+    color: #000;
+}
+.lh16 {
+    line-height: 16px;
+}
+.exhiPro_con .atlas-list li{
+    width:82px;
+    padding-right:54px;
+    border-bottom:none;
+}
+.fl{  float: left;}
+.fr{  float: right;}
+.second-title{
+    padding-left: 18px;
+}
+.second-title h3{
+    font-size: 14px;
+    color:#000;
+    font-weight:bold;
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+
+}
+.second-title .tit-ico{
+    display:inline-block;
+    width:3px;
+    height:14px;
+    background: #007ae1;
+    vertical-align: middle;
+    margin-right:8px;
+    position: relative;
+    top:-2px;
+}
+.blue3 {
+    color: #005eae;
+}
+.ml20{margin-left:20px;}
+.ml15{  margin-left:15px;}
+.word-list li{
+    line-height:22px;
+
+}
+.f12{  font-size:12px;}
+.stand_main_right table td{
+    border:none;
+    text-align: center;
+    border-bottom:1px dashed #ccc;
+    padding:8px 0;
+
+}
+.stand_main_right table{
+    border-collapse: collapse;
+    border:1px solid #ccc;
+}
+.stand_main_right table .title{ background: #eee;}
+.stand_main_right table img{width:50px;height:50px;}
+.vm{vertical-align: middle;}
+.mr5{ margin-right:5px;}
+.chkbox input,.chkbox label{
+    vertical-align: middle;
+    margin:0 5px;
+}
+
+.video-list .videocheck {
+color: #f7883a;
+font-family: Simsun;
+height:14px;
+line-height: 14px;
+margin-top: -12px;
+}

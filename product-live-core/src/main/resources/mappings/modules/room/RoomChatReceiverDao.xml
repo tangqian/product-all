@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.room.dao.RoomChatReceiverDao">
+	
+	<select id="get" resultType="RoomChatReceiver">
+		SELECT
+			*
+		FROM live_room_chat_receiver
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomChatReceiver">
+		SELECT
+			*
+		FROM live_room_chat_receiver
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="RoomChatReceiver">
+		SELECT
+			*
+		FROM live_room_chat_receiver
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_chat_receiver (
+			id,
+			chat_id,
+			receive_by,
+			read_date
+		) VALUES (
+			#{id},
+			#{chatId},
+			#{receiveBy},
+			#{readDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_chat_receiver
+		<set>
+			<if test="chatId != null">chat_id = #{chatId},</if>
+			<if test="receiveBy != null">receive_by = #{receiveBy},</if>
+			<if test="readDate != null">read_date = #{readDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_chat_receiver  
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

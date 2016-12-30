@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.speaker.dao.SpeakerWaiterDao">
+	
+	<select id="get" resultType="SpeakerWaiter">
+		SELECT
+			*
+		FROM live_speaker_waiter
+		WHERE id = #{id}
+	</select>
+	
+	<sql id="findSpeakerWaiterSQL">
+		SELECT
+			waiter.*,
+			user.account AS 'user.account',
+			user.email AS 'user.email',
+			user.type AS 'user.type'
+		FROM live_speaker_waiter waiter,
+			 live_user user
+		WHERE waiter.id = user.id AND user.type = 4
+	</sql>
+	
+	<select id="findList" resultType="SpeakerWaiter">
+		<include refid="findSpeakerWaiterSQL"/>
+		<if test="speakerId != null and speakerId != ''">AND waiter.speaker_id = #{speakerId}</if>
+		ORDER BY waiter.create_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="SpeakerWaiter">
+		SELECT
+			*
+		FROM live_speaker_waiter
+		ORDER BY id DESC
+	</select>
+
+	<select id="getBySpeaker" resultType="SpeakerWaiter">
+		SELECT
+		*
+		FROM live_speaker_waiter
+		WHERE id = #{id}
+		AND speaker_id = #{speakerId}
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_speaker_waiter (
+			id,
+			speaker_id,
+			name,
+			job,
+			<if test="logoId != null and logoId != ''">
+			logo_id,
+			</if>
+			sex,
+			department,
+			mobile_phone,
+			telephone,
+			fax,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{speakerId},
+			#{name},
+			#{job},
+			<if test="logoId != null and logoId != ''">
+			#{logoId},
+			</if>
+			#{sex},
+			#{department},
+			#{mobilePhone},
+			#{telephone},
+			#{fax},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_speaker_waiter
+		<set>
+			<if test="speakerId != null">speaker_id = #{speakerId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="job != null">job = #{job},</if>
+			<if test="logoId != null and logoId != ''">logo_id = #{logoId},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="department != null">department = #{department},</if>
+			<if test="mobilePhone != null">mobile_phone = #{mobilePhone},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="fax != null">fax = #{fax},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_speaker_waiter  
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getSpeakerWaiterForId" resultType="SpeakerWaiter">
+		<include refid="findSpeakerWaiterSQL"/>
+		AND waiter.id = #{id}
+		AND waiter.speaker_id = #{speakerId}
+	</select>
+	
+</mapper>

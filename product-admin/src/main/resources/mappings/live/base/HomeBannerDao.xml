@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.base.dao.HomeBannerDao">
+	
+	<select id="get" resultType="HomeBanner">
+		SELECT
+			*
+		FROM live_home_banner
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="HomeBanner">
+		SELECT
+			*
+		FROM live_home_banner
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(NAME,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY sort
+	</select>
+	
+	<select id="findAllList" resultType="HomeBanner">
+		SELECT
+			*
+		FROM live_home_banner
+		ORDER BY ID DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_home_banner (
+			id,
+			name,
+			file_id,
+			sort,
+			href,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{name},
+			#{fileId},
+			#{sort},
+			#{href},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_home_banner
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="href != null">href = #{href},</if>
+			<if test="updateBy != null">update_by = #{updateBy.id},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_home_banner  
+		WHERE ID= #{id}
+	</update>
+	
+</mapper>

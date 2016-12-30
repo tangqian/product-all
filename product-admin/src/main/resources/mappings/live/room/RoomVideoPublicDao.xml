@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.room.dao.RoomVideoPublicDao">
+	
+	<select id="get" resultType="RoomVideoPublic">
+		SELECT
+			*
+		FROM live_room_video_public
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomVideoPublic">
+		SELECT
+			*
+		FROM live_room_video_public
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(NAME,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findAllList" resultType="RoomVideoPublic">
+		SELECT
+			*
+		FROM live_room_video_public
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findRoomSpeakerVideoForConditions" resultType="RoomVideoPublic">
+		SELECT
+			speaker_video.name,
+			speaker_video.detail,
+			speaker_video.file_id,
+			speaker_video.cover_id,
+			video.room_id,
+			video.source_id
+		FROM
+			live_speaker_video speaker_video,
+			live_room_video video
+		WHERE
+			speaker_video.id = video.source_id
+		AND speaker_video.id = #{id}
+		AND video.room_id = #{roomId}
+	</select>
+	
+	<select id="findRoomVideoPublicForConditions" resultType="RoomVideoPublic">
+		SELECT
+			*
+		FROM live_room_video_public
+		WHERE 
+			source_id = #{sourceId}
+		AND room_id = #{roomId}
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_video_public (
+			id,
+			room_id,
+			source_id,
+			name,
+			detail,
+			file_id,
+			cover_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{sourceId},
+			#{name},
+			#{detail},
+			#{fileId},
+			#{coverId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_video_public
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="sourceId != null">source_id = #{sourceId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="detail != null">detail = #{detail},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="coverId != null">cover_id = #{coverId},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_video_public  
+		WHERE ID= #{id}
+	</update>
+	
+</mapper>

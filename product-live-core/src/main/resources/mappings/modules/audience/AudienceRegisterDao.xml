@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.audience.dao.AudienceRegisterDao">
+	
+	<select id="get" resultType="AudienceRegister">
+		SELECT
+			*
+		FROM live_audience_register
+		WHERE id = #{id}
+	</select>
+
+	<select id="getByUserRoomId" resultType="AudienceRegister">
+		SELECT
+			*
+		FROM live_audience_register
+		WHERE
+			room_id = #{roomId}
+		AND audience_id = #{userId}
+	</select>
+	
+	<select id="findList" resultType="AudienceRegister">
+		SELECT
+			*
+		FROM live_audience_register
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="AudienceRegister">
+		SELECT
+			*
+		FROM live_audience_register
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_audience_register (
+			id,
+			room_id,
+			audience_id,
+			company,
+			country,
+			province,
+			address,
+			name,
+			job,
+			logo_id,
+			sex,
+			department,
+			mobile_phone,
+			telephone,
+			fax,
+			is_sent_email,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{audienceId},
+			#{company},
+			#{country},
+			#{province},
+			#{address},
+			#{name},
+			#{job},
+			#{logoId},
+			#{sex},
+			#{department},
+			#{mobilePhone},
+			#{telephone},
+			#{fax},
+			#{isSentEmail},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_audience_register
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="audienceId != null">audience_id = #{audienceId},</if>
+			<if test="company != null">company = #{company},</if>
+			<if test="country != null">country = #{country},</if>
+			<if test="province != null">province = #{province},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="job != null">job = #{job},</if>
+			<if test="logoId != null">logo_id = #{logoId},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="department != null">department = #{department},</if>
+			<if test="mobilePhone != null">mobile_phone = #{mobilePhone},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="fax != null">fax = #{fax},</if>
+			<if test="isSentEmail != null">is_sent_email = #{isSentEmail},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_audience_register  
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findSendEmailAudienceRegister" resultType="AudienceRegister">
+		SELECT
+			register.id,
+			speaker.company,
+			user.email AS 'user.email',
+			room.id AS 'room.id',
+			room.start_time AS 'room.startTime',
+			room.end_time AS 'room.endTime',
+			room.name AS 'room.name',
+			room.detail AS 'room.detail'
+		FROM
+			live_audience_register register,
+			live_user user,
+			live_room room,
+			live_speaker speaker
+		WHERE
+			register.audience_id = user.id
+		AND register.room_id = room.id
+		AND room.speaker_id = speaker.id
+		AND register.is_sent_email = 0
+		AND user.type = 1
+	</select>
+	
+</mapper>

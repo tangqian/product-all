@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.speaker.dao.SpeakerSpeechRecycleDao">
+	
+	<select id="get" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM live_speaker_speech_recycle
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM live_speaker_speech_recycle
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM live_speaker_speech_recycle
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_speaker_speech_recycle (
+			id,
+			speaker_id,
+			name,
+			file_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{speakerId},
+			#{name},
+			#{fileId},
+			#{sort},
+			#{status},
+			#{auditBy},
+			#{auditTime},
+			#{auditReason},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_speaker_speech_recycle
+		<set>
+			<if test="speakerId != null">speaker_id = #{speakerId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="auditBy != null">audit_by = #{auditBy},</if>
+			<if test="auditTime != null">audit_time = #{auditTime},</if>
+			<if test="auditReason != null">audit_reason = #{auditReason},</if>
+			<if test="createDate != null">create_date = #{createDate},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_speaker_speech_recycle  
+		<where>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="speakerId != null and speakerId != ''">
+		  		AND speaker_id = #{speakerId}
+			</if>
+		</where>
+	</update>
+	
+	<insert id="insertFormSpeech2SpeechRecycle">
+		INSERT INTO live_speaker_speech_recycle 
+		SELECT *
+		FROM live_speaker_speech	 
+		<where> 
+		id = #{id}
+		</where>
+	</insert>
+</mapper>

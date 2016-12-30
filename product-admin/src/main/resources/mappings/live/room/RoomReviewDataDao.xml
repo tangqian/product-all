@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.room.dao.RoomReviewDataDao">
+	
+	<select id="get" resultType="RoomReviewData">
+		SELECT
+			*
+		FROM live_room_review_data
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomReviewData">
+		SELECT
+			room.id AS 'room.id',
+			room.name AS 'room.name',
+			room.start_time AS 'room.startTime',
+			room.end_time AS 'room.endTime',
+			speaker.company AS 'room.company'
+		FROM live_room room, 
+			live_speaker speaker 
+		WHERE 
+			room.speaker_id = speaker.id 
+		AND room.status = 4 
+		AND room.publish_mode = 0
+		<if test="room.searchType == 1">
+			<if test="name != null and name != ''">
+	  			AND	IFNULL(room.name,'') LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</if>
+		<if test="room.searchType == 2">
+			<if test="name != null and name != ''">
+	  			AND	IFNULL(speaker.company,'') LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</if>
+		ORDER BY room.start_time DESC
+	</select>
+	
+	<select id="findReviewDataList" resultType="RoomReviewData">
+		SELECT
+			*
+		FROM
+			live_room_review_data
+		WHERE
+			room_id = #{roomId}
+		ORDER BY sort
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO live_room_review_data (
+			id,
+			room_id,
+			name,
+			file_id,
+			sort,
+			type,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{name},
+			#{fileId},
+			#{sort},
+			#{type},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_review_data
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_review_data  
+		WHERE ID= #{id}
+	</update>
+	
+	<select id="getMaxSort" resultType="java.lang.Integer">
+		SELECT
+			sort
+		FROM
+			live_room_review_data
+		ORDER BY
+			sort DESC
+		LIMIT 1
+	</select>
+	
+</mapper>

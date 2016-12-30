@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:property-placeholder ignore-unresolvable="true" location="config:env.properties"/>
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          autowire="no">
+        <property name="triggers">
+            <list>
+                <ref bean="clearTempSysFileTrigger"/>
+                <ref bean="updateLiveVersionTrigger"/>
+                <ref bean="noticeRoomPresentTrigger"/>
+                <ref bean="noticeRoomOnlineTrigger"/>
+                <ref bean="noticeLiveEmailTrigger"/>
+                <ref bean="closeTheRoomTrigger"/>
+                <ref bean="autoSyncBCloudTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- >>>clear temp file timer configure start -->
+    <bean id="clearTempSysFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="clearTempSysFileJobDetail"/>
+        <property name="cronExpression" value="0 2 0/12 * * ?"/>
+    </bean>
+
+    <bean id="clearTempSysFileJobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="sysFileService"/>
+        <property name="targetMethod" value="clearTempFile"/>
+    </bean>
+    <!-- >>>clear temp file timer configure end -->
+
+    <!-- >>>auto update home pageInfo timer configure start -->
+    <bean id="updateLiveVersionTrigger"  class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="updateLiveVersionJobDetail" />
+        <property name="repeatInterval" value="30000" />
+    </bean>
+
+    <bean id="updateLiveVersionJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="versionEnv" />
+        <property name="targetMethod" value="reload" />
+    </bean>
+    <!-- >>>auto update index liveInfo timer configure end -->
+
+    <!-- >>>auto notice room present timer configure start -->
+    <bean id="noticeRoomPresentTrigger"  class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="noticeRoomPresentJobDetail" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+
+    <bean id="noticeRoomPresentJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="countPresentHandler" />
+        <property name="targetMethod" value="autoRun" />
+    </bean>
+
+    <bean id="noticeRoomOnlineTrigger"  class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="noticeRoomOnlineJobDetail" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+
+    <bean id="noticeRoomOnlineJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="countOnlineHandler" />
+        <property name="targetMethod" value="autoRun" />
+    </bean>
+    <!-- >>>auto notice room present timer configure end -->
+
+    <!-- >>>auto close the room timer configure start -->
+    <bean id="closeTheRoomTrigger"  class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="closeTheRoomJobDetail" />
+        <property name="repeatInterval" value="40000" />
+    </bean>
+
+    <bean id="closeTheRoomJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="roomStatusOverHandler" />
+        <property name="targetMethod" value="autoCloseTheRoom" />
+    </bean>
+    <!-- >>>auto close the room timer configure end -->
+    
+    <bean id="noticeLiveEmailTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="noticeLiveEmailJobDetail"/>
+        <property name="cronExpression" value="0 0/25 * * * ?"/>
+    </bean>
+
+    <bean id="noticeLiveEmailJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="liveNoticeService"/>
+        <property name="targetMethod" value="sendEmail"/>
+    </bean>
+
+    <!-- >>>auto Sync BCloud timer configure start -->
+    <bean id="autoSyncBCloudTrigger"  class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="autoSyncBCloudJobDetail" />
+        <property name="repeatInterval" value="180000" />
+    </bean>
+
+    <bean id="autoSyncBCloudJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="roomReviewDataService" />
+        <property name="targetMethod" value="syncBCloud" />
+    </bean>
+    <!-- >>>auto Sync BCloud timer configure end -->
+</beans>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.audience.dao.AudienceRegisterDao">
+	
+	<resultMap
+		type="com.thinkgem.jeesite.modules.live.audience.vo.AudienceRegisterVo" id="AudienceRegisterVo">
+		<id property="id" column="id" />
+		<result property="roomId" column="room_id" />
+		<result property="audienceId" column="audience_id" />
+		<result property="createDate" column="create_date" />
+		<result property="updateDate" column="update_date" />
+		<result property="account" column="account" />
+		<result property="email" column="email" />
+		<result property="name" column="name" />
+		<result property="sex" column="sex" />
+		<result property="company" column="company" />
+		<result property="job" column="job" />
+		<result property="department" column="department" />
+		<result property="mobilePhone" column="mobile_phone" />
+		<result property="telephone" column="telephone" />
+		<result property="fax" column="fax" />
+		<result property="country" column="country" />
+		<result property="province" column="province" />
+		<result property="address" column="address" />
+
+	</resultMap>
+	
+	<select id="get" resultType="AudienceRegister">
+		SELECT
+			*
+		FROM live_audience_register
+		WHERE ID = #{id}
+	</select>
+	
+	<sql id="findCriteriaSQL">
+		<if test="searchType == 1">
+			<if test="name != null and name != ''">
+	  			AND	IFNULL(user.account,'') LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</if>
+		<if test="searchType == 2">
+			<if test="name != null and name != ''">
+	  			AND	IFNULL(audienceRegister.company,'') LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</if>
+		<if test="searchType == 3">
+			<if test="name != null and name != ''">
+	  			AND	IFNULL(user.email,'') LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</if>
+		<if test="roomId != null">
+			AND audienceRegister.room_id = #{roomId}
+		</if>
+		<if test="registerTimeFrom != null">
+			AND <![CDATA[ audienceRegister.create_date >= #{registerTimeFrom} ]]>
+		</if>
+		<if test="registerTimeTo != null">
+			AND <![CDATA[ audienceRegister.create_date <= #{registerTimeTo} ]]>
+		</if>
+	</sql>
+
+	<sql id="findAudienceRegisterListByObjSql">
+		SELECT
+			audienceRegister.*,
+			user.account AS 'user.account',
+			user.email AS 'user.email',
+			room.name AS 'room.name',
+			room.id AS 'room.id'
+		FROM live_audience_register audienceRegister, 
+			live_user user,
+			live_room room
+		WHERE audienceRegister.audience_id = user.id 
+			AND user.type = 1 
+			AND audienceRegister.room_id = room.id
+		<include refid="findCriteriaSQL"/>
+		ORDER BY audienceRegister.create_date DESC
+	</sql>
+	
+	<select id="findList" resultType="AudienceRegister">
+		<include refid="findAudienceRegisterListByObjSql"/>
+	</select>
+	
+	<!-- 观众登记导出 -->
+	<select id="findAudienceRegisterForObj" resultMap="AudienceRegisterVo" statementType="PREPARED">
+		<include refid="findAudienceRegisterListByObjSql"/>
+	</select>
+
+	<select id="findAudienceRegisterForId" resultMap="AudienceRegisterVo" statementType="PREPARED">
+		SELECT
+			audienceRegister.*,
+			user.account AS 'user.account',
+			user.email AS 'user.email',
+			room.name AS 'room.name'
+		FROM live_audience_register audienceRegister, 
+			 live_user user,
+			 live_audience audience,
+			 live_room room
+		WHERE audienceRegister.audience_id = user.id AND user.type = 1 
+			AND audienceRegister.audience_id = audience.id
+			AND audienceRegister.room_id = room.id
+			AND audienceRegister.id = #{id}
+	</select>
+		
+	<select id="countAudienceRegisterForRoomId" resultType="java.lang.Integer">
+		SELECT
+			COUNT(id)
+		FROM
+			live_audience_register
+		WHERE
+			company NOT LIKE '%smartlifein%' AND room_id = #{roomId}
+	</select>
+	
+	<select id="findAudienceRegisterForRoomId" resultType="AudienceRegister">
+		SELECT
+			audienceRegister.*, 
+			user.account AS 'user.account',
+			user.email AS 'user.email'
+		FROM
+			live_audience_register audienceRegister,
+			live_user user
+		WHERE
+			audienceRegister.audience_id = user.id
+		AND user.type = 1
+		AND	audienceRegister.company NOT LIKE '%smartlifein%'
+		<include refid="findCriteriaSQL"/>
+	</select>
+
+	<select id="findAllList" resultType="AudienceRegister">
+		SELECT
+			*
+		FROM live_audience_register
+		ORDER BY ID DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_audience_register (
+			id,
+			room_id,
+			audience_id,
+			company,
+			country,
+			province,
+			address,
+			name,
+			job,
+			logo_id,
+			sex,
+			department,
+			mobile_phone,
+			telephone,
+			fax,
+			is_sent_email,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{audienceId},
+			#{company},
+			#{country},
+			#{province},
+			#{address},
+			#{name},
+			#{job},
+			#{logoId},
+			#{sex},
+			#{department},
+			#{mobilePhone},
+			#{telephone},
+			#{fax},
+			#{isSentEmail},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_audience_register
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="audienceId != null">audience_id = #{audienceId},</if>
+			<if test="company != null">company = #{company},</if>
+			<if test="country != null">country = #{country},</if>
+			<if test="province != null">province = #{province},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="job != null">job = #{job},</if>
+			<if test="logoId != null">logo_id = #{logoId},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="department != null">department = #{department},</if>
+			<if test="mobilePhone != null">mobile_phone = #{mobilePhone},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="fax != null">fax = #{fax},</if>
+			<if test="isSentEmail != null">is_sent_email = #{isSentEmail},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_audience_register  
+		WHERE ID= #{id}
+	</update>
+	
+</mapper>

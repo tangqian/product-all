@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.room.dao.RoomVideoDao">
+	
+	<select id="get" resultType="RoomVideo">
+		SELECT
+			*
+		FROM live_room_video
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomVideo">
+		SELECT
+			roomVideo.*,
+			speakerVideo.name AS 'name',
+			speakerVideo.detail AS 'detail',
+			speakerVideo.file_id AS 'fileId',
+			speakerVideo.cover_id AS 'coverId'
+		FROM
+			live_room_video roomVideo,
+			live_speaker_video speakerVideo
+		WHERE
+			roomVideo.source_id = speakerVideo.id
+		AND roomVideo.room_id = #{roomId}
+		ORDER BY
+			speakerVideo.name
+	</select>
+	
+	<select id="findAllList" resultType="RoomVideo">
+		SELECT
+			*
+		FROM live_room_video
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_video (
+			id,
+			room_id,
+			source_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{sourceId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_video
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="sourceId != null">source_id = #{sourceId},</if>
+			<if test="createDate != null">create_date = #{createDate},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_video  
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteDatas">
+		DELETE FROM live_room_video
+		WHERE source_id in
+		<foreach collection="srcIds" item="item" separator="," open="(" close=")" index="index">
+			#{item}
+		</foreach>
+	</update>
+	
+	<select id="findRoomVideoForRoomId" resultType="RoomVideo">
+		SELECT
+			roomVideo.*, 
+			speakerVideo.speaker_id AS 'source.speakerId',
+			speakerVideo.`name` AS 'source.name'
+		FROM
+			live_room_video roomVideo,
+			live_speaker_video speakerVideo
+		WHERE
+			roomVideo.source_id = speakerVideo.id
+		AND roomVideo.room_id = #{roomId}
+		AND speakerVideo.speaker_id = #{speakerId}
+		ORDER BY
+			roomVideo.create_date DESC
+	</select>
+	
+</mapper>

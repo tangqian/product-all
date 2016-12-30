@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.room.dao.RoomDao">
+	
+	<select id="get" resultType="Room">
+		SELECT
+			*
+		FROM live_room
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="Room">
+		SELECT
+			room.*,
+			speaker.company AS 'company'
+		FROM live_room room, live_speaker speaker 
+		WHERE room.speaker_id = speaker.id
+		<if test="searchType == 1">
+			<if test="name != null and name != ''">
+	  			AND	IFNULL(room.name,'') LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</if>
+		<if test="searchType == 2">
+			<if test="name != null and name != ''">
+	  			AND	IFNULL(speaker.company,'') LIKE CONCAT('%', #{name}, '%')
+			</if>
+		</if>
+		<if test="status != null">
+			AND room.status = #{status}
+		</if>
+		<if test="publishMode != null">
+			AND room.publish_mode = #{publishMode}
+		</if>
+		ORDER BY room.is_top DESC, room.top_sort, FIELD(room.status, 2, 0, 4), room.start_time DESC
+	</select>
+	
+	<select id="findAllList" resultType="Room">
+		SELECT
+			*
+		FROM live_room
+		ORDER BY ID DESC
+	</select>
+
+	<insert id="insert">
+		INSERT INTO live_room (
+			id,
+			name,
+			keyword,
+			speaker_id,
+			publish_mode,
+			watch_mode,
+			is_show,
+			is_contact_show,
+			industry,
+			start_time,
+			end_time,
+			bg_end_time,
+			<if test="reviewId != null and reviewId !=''">
+				review_id,
+			</if>
+			cover_id,
+			summary,
+			detail,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{name},
+			#{keyword},
+			#{speakerId},
+			#{publishMode},
+			#{watchMode},
+			#{isShow},
+			#{isContactShow},
+			#{industry},
+			#{startTime},
+			#{endTime},
+			#{bgEndTime},
+			<if test="reviewId != null and reviewId !=''">
+				#{reviewId},
+			</if>
+			#{coverId},
+			#{summary},
+			#{detail},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE live_room
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="keyword != null">keyword = #{keyword},</if>
+			<if test="speakerId != null">speaker_id = #{speakerId},</if>
+			<if test="publishMode != null">publish_mode = #{publishMode},</if>
+			<if test="watchMode != null">watch_mode = #{watchMode},</if>
+			<if test="isShow != null">is_show = #{isShow},</if>
+			<if test="isContactShow != null">is_contact_show = #{isContactShow},</if>
+			<if test="isTop != null">is_top = #{isTop},</if>
+			<if test="topSort != null">top_sort = #{topSort},</if>
+			<if test="industry != null">industry = #{industry},</if>
+			<if test="startTime != null">start_time = #{startTime},</if>
+			<if test="endTime != null">end_time = #{endTime},</if>
+			<if test="bgEndTime != null">bg_end_time = #{bgEndTime},</if>
+			<if test="reviewId != null and reviewId != ''">review_id = #{reviewId},</if>
+			<if test="coverId != null">cover_id = #{coverId},</if>
+			<if test="summary != null">summary = #{summary},</if>
+			<if test="detail != null">detail = #{detail},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="updateBy != null">update_by = #{updateBy.id},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+
+    <update id="updateStatus">
+        UPDATE live_room
+        <set>
+            status = #{status},
+            update_by = #{updateBy.id},
+            update_date = #{updateDate}
+        </set>
+        WHERE
+        ID = #{id}
+    </update>
+	
+	<update id="delete">
+		DELETE FROM live_room  
+		WHERE ID= #{id}
+	</update>
+	
+</mapper>

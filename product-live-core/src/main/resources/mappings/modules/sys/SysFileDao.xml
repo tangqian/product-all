@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.sys.dao.SysFileDao">
+	
+	<select id="get" resultType="SysFile">
+		SELECT
+			*
+		FROM sys_file
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysFile">
+		SELECT
+			*
+		FROM sys_file
+		WHERE 1 = 1
+		<if test="parentId != null and parentId != ''">AND parent_id = #{parentId}</if>
+		ORDER BY sort
+	</select>
+	
+	<select id="findAllList" resultType="SysFile">
+		SELECT
+			*
+		FROM sys_file
+		ORDER BY id DESC
+	</select>
+
+	<select id="findTempList" resultType="SysFile">
+		SELECT
+			*
+		FROM sys_file
+		WHERE is_temp = 1 AND create_date &lt;= #{endDay}
+	</select>
+
+	<select id="findListBySubjectType" resultType="SysFile">
+		SELECT
+			*
+		FROM sys_file
+		WHERE is_temp = 0 AND subject_type = #{subjectType} AND create_date &lt;= #{limitTime}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_file (
+			id,
+			uri,
+			original_name,
+			size,
+			ext,
+			is_temp,
+			type,
+			subject_type,
+			sort,
+			parent_id,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{uri},
+			#{originalName},
+			#{size},
+			#{ext},
+			#{isTemp},
+			#{type},
+			#{subjectType},
+			#{sort},
+			#{parentId},
+			#{createDate},
+			#{createBy}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_file
+		<set>
+			<if test="uri != null">uri = #{uri},</if>
+			<if test="originalName != null">original_name = #{originalName},</if>
+			<if test="size != null">size = #{size},</if>
+			<if test="ext != null">ext = #{ext},</if>
+			<if test="isTemp != null">is_temp = #{isTemp},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="parentId != null">parent_id = #{parentId},</if>
+			<if test="subjectType != null">subject_type = #{subjectType},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sys_file  
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

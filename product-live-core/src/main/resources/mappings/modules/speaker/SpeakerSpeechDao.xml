@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.speaker.dao.SpeakerSpeechDao">
+	
+	<select id="get" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM live_speaker_speech
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM live_speaker_speech
+		WHERE 1 = 1
+		<if test="speakerId != null and speakerId != ''">
+	  		AND speaker_id = #{speakerId}
+		</if>
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY FIELD(status, 4, 3, 0), create_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM live_speaker_speech
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_speaker_speech (
+			id,
+			speaker_id,
+			name,
+			file_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{speakerId},
+			#{name},
+			#{fileId},
+			#{sort},
+			#{status},
+			#{auditBy},
+			#{auditTime},
+			#{auditReason},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_speaker_speech
+		<set>
+			<if test="speakerId != null">speaker_id = #{speakerId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="auditBy != null">audit_by = #{auditBy},</if>
+			<if test="auditTime != null">audit_time = #{auditTime},</if>
+			<if test="auditReason != null">audit_reason = #{auditReason},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_speaker_speech  
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delSpeakerSpeechForIds">
+		DELETE FROM live_speaker_speech  
+		WHERE id in 
+		<foreach collection="speechIds" item="item" separator="," open="(" close=")" index="index">
+			#{item }
+		</foreach>
+	</update>
+	
+	<select id="getSpeakerSpeechForObj" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM
+			live_speaker_speech
+		WHERE
+			NAME = #{name}
+		AND id NOT IN (#{id}) AND speaker_id = #{speakerId}
+	</select>
+		
+	<insert id="insertFormSpeechRecycle2Speech">
+		INSERT INTO live_speaker_speech (
+			id,
+			speaker_id,
+			name,
+			file_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		) SELECT
+			id,
+			speaker_id,
+			name,
+			file_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		FROM live_speaker_speech_recycle	 
+		<where> 
+		id = #{id}
+		</where>
+	</insert>
+	
+	<delete id="delSpeakerSpeechForObj">
+		DELETE FROM live_speaker_speech where name = #{name} AND speaker_id = #{speakerId}
+	</delete>
+	
+	<select id="findSpeakerSpeechForConditions" resultType="SpeakerSpeech">
+		SELECT
+			*
+		FROM
+			live_speaker_speech
+		<where>
+			<if test="speakerId != null">AND speaker_id = #{speakerId}</if>
+			<if test="speechIds != null and speechIds != ''">AND id NOT IN(${speechIds})</if> 
+		</where>
+		ORDER BY FIELD(status, 2, 0, 4), create_date DESC
+	</select>
+	
+	
+</mapper>

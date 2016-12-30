@@ -1,0 +1,19 @@
+body{background: #ffffff;}
+.login_header{height: 90px;}
+.wrapper{width: 1000px;margin: 0 auto;}
+.login_header .wrapper{border-bottom: 2px solid #cc0000;height: 88px;}
+
+.ml20{margin-left: 20px;}
+.login_header img.fl{margin-top: 32px;margin-left: 15px;}
+.wrapper{width: 1000px;margin: 0 auto;}
+
+.zhinan_content h3{font-size: 14px;font-weight: bold;color: #666666;font-family: Simsun;padding-top: 36px;}
+.one_zhinan{width: 240px;padding:10px 30px;line-height: 26px;background: #f1f1f1;}
+.one_zhinan span{color: #005eae}
+.mtb12{margin: 14px 0;}
+.zn_tb{line-height: 36px;text-align: center;margin-top: 20px;border-left: 1px solid #f1f1f1;}
+.zn_tb th{background: #f1f1f1;border-right:1px solid #f1f1f1;}
+.zn_tb .ml27{margin-left: 27px;text-align: left;}
+.lh22{line-height: 22px;padding: 5px 0}
+.zn_tb td{border-right:1px solid #f1f1f1;border-bottom: 1px solid #f1f1f1;}
+.mt100{margin-bottom: 100px;}

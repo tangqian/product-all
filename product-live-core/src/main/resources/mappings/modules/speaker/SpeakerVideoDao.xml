@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.speaker.dao.SpeakerVideoDao">
+	
+	<select id="get" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM live_speaker_video
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM live_speaker_video
+		WHERE 1 = 1
+		<if test="speakerId != null and speakerId != ''">
+	  		AND speaker_id = #{speakerId}
+		</if>
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY FIELD(status, 4, 3, 0), create_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM live_speaker_video
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_speaker_video (
+			id,
+			speaker_id,
+			name,
+			detail,
+			file_id,
+			cover_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{speakerId},
+			#{name},
+			#{detail},
+			#{fileId},
+			#{coverId},
+			#{sort},
+			#{status},
+			#{auditBy},
+			#{auditTime},
+			#{auditReason},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_speaker_video
+		<set>
+			<if test="speakerId != null">speaker_id = #{speakerId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="detail != null">detail = #{detail},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="coverId != null">cover_id = #{coverId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="auditBy != null">audit_by = #{auditBy},</if>
+			<if test="auditTime != null">audit_time = #{auditTime},</if>
+			<if test="auditReason != null">audit_reason = #{auditReason},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_speaker_video  
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delSpeakerVideoForIds">
+		DELETE FROM live_speaker_video  
+		WHERE id in 
+		<foreach collection="videoIds" item="item" separator="," open="(" close=")" index="index">
+			#{item }
+		</foreach>
+	</update>
+	
+	<select id="getSpeakerVideoForObj" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM
+			live_speaker_video
+		WHERE
+			NAME = #{name}
+		AND id NOT IN (#{id}) AND speaker_id = #{speakerId}
+	</select>
+	
+	<select id="findSpeakerVideoForIds" resultType="SpeakerVideo">
+		SELECT * FROM live_speaker_video  
+		WHERE id in 
+		<foreach collection="videoIds" item="item" separator="," open="(" close=")" index="index">
+			#{item }
+		</foreach>
+	</select>
+	
+	<select id="getSpeakerVideoForName" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM
+			live_speaker_video
+		WHERE
+			NAME = #{name} AND speaker_id = #{speakerId}
+	</select>
+	
+	<insert id="insertFormVideoRecycle2Video">
+		INSERT INTO live_speaker_video (
+			id,
+			speaker_id,
+			name,
+			detail,
+			file_id,
+			cover_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		) SELECT
+			id,
+			speaker_id,
+			name,
+			detail,
+			file_id,
+			cover_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		FROM live_speaker_video_recycle	 
+		<where> 
+		id = #{id}
+		</where>
+	</insert>
+	
+	<delete id="delSpeakerVideoForObj">
+		DELETE FROM live_speaker_video where name = #{name} AND speaker_id = #{speakerId}
+	</delete>
+	
+	<select id="findSpeakerVideoForConditions" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM
+			live_speaker_video
+		<where>
+			<if test="speakerId != null">AND speaker_id = #{speakerId}</if>
+			<if test="videoIds != null and videoIds != ''">AND id NOT IN(${videoIds})</if> 
+		</where>
+		ORDER BY FIELD(status, 2, 0, 4), create_date DESC
+	</select>
+
+	<select id="findAllRoomVideoList" resultType="SpeakerVideo">
+		SELECT
+			video.*
+		FROM
+			live_speaker_video video,
+			live_room_video room_video,
+			live_room room
+		WHERE video.id = room_video.source_id
+			AND room.id = room_video.room_id
+			AND room.status != 4
+		ORDER BY
+			video.id DESC
+	</select>
+	
+	<select id="countSpeakerVideo" resultType="java.lang.Integer">
+		SELECT
+			COUNT(id)
+		FROM
+			live_speaker_video
+		<where>
+			speaker_id = #{speakerId}
+		</where>
+	</select>
+	
+</mapper>

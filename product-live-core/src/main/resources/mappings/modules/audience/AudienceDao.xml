@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.audience.dao.AudienceDao">
+	
+	<select id="get" resultType="Audience">
+		SELECT
+			*
+		FROM live_audience
+		WHERE id = #{id}
+	</select>
+	
+	<!-- 观众数据->全部观众列表 -->
+	<select id="findList" resultType="Audience">
+		SELECT
+			audience.*,
+			present.create_date AS 'enterDate',
+			user.email AS 'user.email'
+		FROM
+			live_audience audience,
+			live_user user,
+			live_report_user_present present
+		WHERE
+			audience.id = user.id
+		AND present.user_id = user.id
+		AND user.type = 1
+		AND audience.company NOT LIKE '%ofweek%'
+		AND present.room_id = #{roomChat.roomId}
+		<include refid="findAudienceConditions"/>
+		ORDER BY
+			present.create_date DESC
+	</select>
+	
+	<!-- 观众数据->下载资料观众列表 -->
+	<select id="findDownloadAudienceList" resultType="Audience">
+		SELECT
+			audience.*, 
+			download.data_id AS 'speakerData.id',
+			download.name AS 'speakerData.name',
+			download.create_date AS 'speakerData.createDate',
+			download.room_id AS 'roomChat.roomId'
+		FROM
+			live_audience audience,
+			live_user user,
+			live_report_data_download download
+		WHERE
+			audience.id = user.id
+		AND audience.id = download.user_id 
+		AND download.type = 1 
+		AND user.type = 1
+		AND audience.company NOT LIKE '%ofweek%'
+		AND download.room_id = #{roomChat.roomId}
+		<include refid="findAudienceConditions"/>
+		ORDER BY
+			download.create_date DESC
+	</select>
+	
+	<!-- 观众数据->聊天观众列表 -->
+	<select id="findAudienceChatList" resultType="Audience">
+		SELECT
+			audience.*,
+			chat.room_id AS 'roomChat.roomId'
+		FROM
+			live_audience audience,
+			live_user user,
+			live_room_chat chat
+		WHERE
+			audience.id = user.id
+		AND chat.send_by = user.id
+		AND user.type = 1
+		AND audience.company NOT LIKE '%ofweek%'	
+		AND chat.room_id = #{roomChat.roomId}
+		<include refid="findAudienceConditions"/>
+		GROUP BY user.id
+		ORDER BY
+			chat.create_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="Audience">
+		SELECT
+			*
+		FROM live_audience
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_audience (
+			id,
+			company,
+			country,
+			province,
+			address,
+			name,
+			job,
+			logo_id,
+			sex,
+			department,
+			mobile_phone,
+			telephone,
+			fax,
+			biz_type,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{company},
+			#{country},
+			#{province},
+			#{address},
+			#{name},
+			#{job},
+			#{logoId},
+			#{sex},
+			#{department},
+			#{mobilePhone},
+			#{telephone},
+			#{fax},
+			#{bizType},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_audience
+		<set>
+			<if test="company != null">company = #{company},</if>
+			<if test="country != null">country = #{country},</if>
+			<if test="province != null">province = #{province},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="job != null">job = #{job},</if>
+			<if test="logoId != null">logo_id = #{logoId},</if>
+			<if test="sex != null">sex = #{sex},</if>
+			<if test="department != null">department = #{department},</if>
+			<if test="mobilePhone != null">mobile_phone = #{mobilePhone},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="fax != null">fax = #{fax},</if>
+			<if test="bizType != null">biz_type = #{bizType},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_audience  
+		WHERE id = #{id}
+	</update>
+	
+	<sql id="findAudienceConditions">
+		<if test="searchType == 1">
+			AND	IFNULL(audience.company,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		<if test="searchType == 2">
+			AND	IFNULL(audience.name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+	</sql>
+	
+</mapper>

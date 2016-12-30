@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.sys.dao.VisitorDao">
+	
+	<select id="get" resultType="Visitor">
+		SELECT
+			*
+		FROM live_visitor
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Visitor">
+		SELECT
+			*
+		FROM live_visitor
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="Visitor">
+		SELECT
+			*
+		FROM live_visitor
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_visitor (
+			id,
+			ip,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{ip},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_visitor
+		<set>
+			<if test="ip != null">ip = #{ip},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_visitor  
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

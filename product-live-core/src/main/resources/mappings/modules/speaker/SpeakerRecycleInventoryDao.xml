@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.speaker.dao.SpeakerRecycleInventoryDao">
+	
+	<select id="get" resultType="SpeakerRecycleInventory">
+		SELECT
+			*
+		FROM live_speaker_recycle_inventory
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SpeakerRecycleInventory">
+		SELECT
+			*
+		FROM live_speaker_recycle_inventory
+		<where>
+			<if test="speakerId != null and speakerId != ''">
+		  		AND speaker_id = #{speakerId}
+			</if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="findAllList" resultType="SpeakerRecycleInventory">
+		SELECT
+			*
+		FROM live_speaker_recycle_inventory
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_speaker_recycle_inventory (
+			id,
+			speaker_id,
+			subject_name,
+			subject_id,
+			subject_type,
+			create_date
+		) VALUES (
+			#{id},
+			#{speakerId},
+			#{subjectName},
+			#{subjectId},
+			#{subjectType},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_speaker_recycle_inventory
+		<set>
+			<if test="speakerId != null">speaker_id = #{speakerId},</if>
+			<if test="subjectName != null">subject_name = #{subjectName},</if>
+			<if test="subjectId != null">subject_id = #{subjectId},</if>
+			<if test="subjectType != null">subject_type = #{subjectType},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_speaker_recycle_inventory  
+		<where>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="speakerId != null and speakerId != ''">
+		  		AND speaker_id = #{speakerId}
+			</if>
+		</where>
+	</update>
+	
+</mapper>

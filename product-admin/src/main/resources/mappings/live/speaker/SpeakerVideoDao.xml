@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.live.speaker.dao.SpeakerVideoDao">
+	
+	<select id="get" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM live_speaker_video
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="findList" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM live_speaker_video
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+	  		AND	IFNULL(NAME,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findAllList" resultType="SpeakerVideo">
+		SELECT
+			*
+		FROM live_speaker_video
+		ORDER BY ID DESC
+	</select>
+	
+	<select id="findAllRoomList" resultType="SpeakerVideo">
+		SELECT
+			video.*
+		FROM
+			live_speaker_video video,
+			live_room_video room_video,
+			live_room room
+		WHERE video.id = room_video.source_id
+		AND room.id = room_video.room_id
+		AND room.status != 4
+		ORDER BY
+			video.id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_speaker_video (
+			id,
+			speaker_id,
+			name,
+			detail,
+			file_id,
+			cover_id,
+			sort,
+			status,
+			audit_by,
+			audit_time,
+			audit_reason,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{speakerId},
+			#{name},
+			#{detail},
+			#{fileId},
+			#{coverId},
+			#{sort},
+			#{status},
+			#{auditBy},
+			#{auditTime},
+			#{auditReason},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_speaker_video
+		<set>
+			<if test="speakerId != null">speaker_id = #{speakerId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="detail != null">detail = #{detail},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="coverId != null">cover_id = #{coverId},</if>
+			<if test="sort != null">sort = #{sort},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="auditBy != null">audit_by = #{auditBy},</if>
+			<if test="auditTime != null">audit_time = #{auditTime},</if>
+			<if test="auditReason != null">audit_reason = #{auditReason},</if>
+			<if test="createDate != null">create_date = #{createDate},</if>
+			<if test="updateDate != null">update_date = #{updateDate}</if>
+	    </set>
+		WHERE
+			ID = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_speaker_video  
+		WHERE ID= #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofweek.live.core.modules.room.dao.RoomSpeechPublicDao">
+	
+	<select id="get" resultType="RoomSpeech">
+		SELECT
+			*
+		FROM live_room_speech_public
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RoomSpeech">
+		SELECT
+			*
+		FROM live_room_speech_public
+		WHERE 1 = 1
+		<if test="roomId != null and roomId != ''">AND room_id = #{roomId}</if>
+		ORDER BY name
+	</select>
+	
+	<select id="findAllList" resultType="RoomSpeech">
+		SELECT
+			*
+		FROM live_room_speech_public
+		ORDER BY id DESC
+	</select>
+		
+	<insert id="insert">
+		INSERT INTO live_room_speech_public (
+			id,
+			room_id,
+			source_id,
+			name,
+			file_id,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{roomId},
+			#{sourceId},
+			#{name},
+			#{fileId},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE live_room_speech_public
+		<set>
+			<if test="roomId != null">room_id = #{roomId},</if>
+			<if test="sourceId != null">source_id = #{sourceId},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="fileId != null">file_id = #{fileId},</if>
+			<if test="createDate != null">create_date = #{createDate},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+	    </set>
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM live_room_speech_public  
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteBySourceId">
+		DELETE FROM live_room_speech_public  
+		WHERE source_id = #{speechId}
+	</update>
+	
+	<select id="getRoomSpeechPub" resultType="RoomSpeech">
+		SELECT
+			*
+		FROM
+			live_room_speech_public
+		WHERE
+			room_id = #{roomId}
+		AND source_id = #{source.id}
+	</select>
+	
+	<update id="deleteRoomSpeechPub">
+		DELETE FROM live_room_speech_public
+		WHERE room_id = #{roomId}
+		AND source_id = #{source.id}
+	</update>
+	
+</mapper>

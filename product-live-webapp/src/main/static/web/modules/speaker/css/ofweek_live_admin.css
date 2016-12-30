@@ -1,0 +1,389 @@
+@charset "UTF-8";
+
+/* CSS Reset 样式重设
+----------------------------------------------------------------------------- */
+/* 防止用户自定义背景颜色对网页的影响 */
+html {
+    color: #000;
+    background: #fff;
+    font: normal 14px/1.5 "Microsoft Yahei";
+}
+
+/* 清除内外边距，内外边距通常让各个浏览器样式的表现位置不同 */
+body,h1,h2,h3,h4,h5,h6,hr,div,p,blockquote, /* structural elements 结构元素 */
+dl,dt,dd,ul,ol,li, /* list elements 列表元素 */
+pre,code, /* text formatting elements 文本格式元素 */
+form,fieldset,legend,input,textarea,button, /* form elements 表单元素 */
+th,td, /* table elements 表格元素 */
+article,aside,details,figcaption,figure,footer,header,menu,nav,section /* HTML5 elements HTML5 元素 */ {
+    margin: 0;
+    padding: 0;
+}
+
+/* 重设 HTML5 标签，IE 需要在 js 中 createElement(TAG) */
+article,aside,details,figcaption,figure,footer,header,menu,nav,section {
+    display: block;
+}
+
+/* HTML5 媒体文件跟 img 保持一致 */
+audio,canvas,video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/* 要注意表单元素并不继承父级 font 的问题 */
+body,button,input,select,textarea {
+    font: 12px/1.5 arial,"Hiragino Sans GB","SimSun";
+}
+
+/* 使表单元素在 IE 下能继承字体大小 */
+input,select,textarea {
+    font-size: 100%;
+}
+
+/* ?解决在 IE7 及更早浏览器下随着 value 增多两边留白也随着增加的问题 */
+input,button{
+    *overflow: visible;
+}
+
+/* ?解决 Firefox 下按钮内文字垂直居中 */
+input[type='reset']::-moz-focus-inner,
+input[type='button']::-moz-focus-inner,
+input[type='submit']::-moz-focus-inner,
+input[type='file'] > input[type='button']::-moz-focus-inner,
+button::-moz-focus-inner {
+    border: none;
+    padding: 0;
+}
+
+/* 去掉各Table cell 的边距并让其边重合 */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* IE bug fixed: th 不继承 text-align */
+th {
+    text-align: inherit;
+}
+
+/* 去除默认边框 */
+fieldset,img {
+    border: 0;
+    vertical-align: top;
+}
+
+/* ie6 7 8(q) bug 显示为行内表现 */
+iframe {
+    display: block;
+}
+
+/* 去掉 firefox 下此元素的边框 */
+abbr,acronym {
+    border: 0;
+    font-variant: normal;
+}
+
+/* 一致的 del 样式 */
+del {
+    text-decoration: line-through;
+}
+
+/* 将斜体扶正 */
+address,caption,cite,code,dfn,em,th,var,i {
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* 代码字体 */
+code,kbd,pre,samp {
+    font-family: monospace, serif;
+    font-size: 1em;
+}
+
+/* 去掉列表前的标识 li 会继承 */
+ol,ul {
+    list-style: none;
+}
+
+/* 对齐是排版最重要的因素，别让什么都居中 */
+caption,th {
+    text-align: left;
+}
+
+/* 来自 Yahoo，让标题都自定义，适应多个系统应用 */
+h1,h2,h3,h4,h5,h6 {
+    font-size: 100%;
+    font-weight: 500;
+}
+q:before,q:after {
+    content: '';
+}
+
+/* 统一上标和下标 */
+sub,sup {
+    position: relative;
+    font-size: 75%;
+    line-height: 0;
+    vertical-align: baseline;
+}
+sup {
+    top: -0.5em;
+}
+sub {
+    bottom: -0.25em;
+}
+
+/* 标记，类似于手写的荧光笔的作用 */
+mark {
+    background: #fffdd1;
+}
+
+/* 正常链接 未访问 */
+a:link,a:visited {
+    color: #000;
+}
+
+/* 鼠标悬停 */
+a:hover {
+    color: #0560a7;
+    text-decoration: underline;
+}
+
+/* 默认不显示下划线，保持页面简洁 */
+ins,a {
+    text-decoration: none;
+}
+
+img{ vertical-align: middle; }
+
+/* 通用样式
+----------------------------------------------------------------------------- */
+/* 清理浮动方式 */
+.clearfix:before, /* :before 伪类，是用来处理 top-margin 边折叠 */
+.clearfix:after {
+    content: '';
+    display: table; /* 隐藏这个空白使用的是 display: table */
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1; /* for IE6-7 */
+}
+
+/* 浮动 */
+.fl{ float: left; }
+.fr{ float: right; }
+
+/* 间距 */
+.em1{ padding: 0 .5em; }
+.em2{ padding: 0 1em; }
+
+/* 行高 */
+.line-h30{ line-height: 30px; }
+
+/* 宽度 */
+.w1000{ width: 1000px; margin-left: auto; margin-right: auto; }
+.w830{ width: 830px; }
+
+/* 上边距 */
+.mt5{ margin-top: 5px; }
+.mt10{ margin-top: 10px; }
+.mt15{ margin-top: 15px; }
+.mt20{ margin-top: 20px; }
+.mt30{ margin-top: 30px; }
+
+/* 右边距 */
+.mr10{ margin-right: 10px; }
+.mr20{ margin-right: 20px; }
+
+/* 字体颜色 */
+.red{ color: #ff0000; }
+.red-start{ padding: 0 .5em; color: #ff0000; font-family: "???"; }
+
+/* 对齐 */
+.align-left{ text-align: left; }
+.align-right{ text-align: right; }
+.align-center{ text-align: center; }
+
+/* 按钮 */
+.button-a{ display: inline-block; *display: inline; *zoom: 1; height: 25px; padding: 0 2em; text-align: center; line-height: 25px; color: #005eae; border: 1px solid #8c8c8c; background: #f8f8f8; border-radius: 5px; cursor: pointer; transition: background 0.1s; outline: none; }
+.button-a:link,.button-a:hover{ color: #005eae; }
+.button-a:hover, a.button-a:hover{ color: #005eae; background: #f0f0f0; text-decoration: none; }
+
+.button-b{ display: inline-block; *display: inline; *zoom: 1; height: 32px; padding: 0 3em; line-height: 32px; text-align: center; color: #fff; font-size: 14px; border: 0; border-radius: 5px; background: #0560a7; cursor: pointer; transition: background 0.1s; outline: none; }
+.button-b:link, .button-b:visited{ color: #fff; }
+.button-b:hover, a.button-b:hover{ background: #e10000; text-decoration: none; }
+
+.button-upload{ display: block; width: 83px; height: 33px; padding: 0 0 0 30px; font: normal 14px/33px "Microsoft Yahei"; text-align: center; background: url(../img/btn_upload.png) center no-repeat; }
+.button-upload:link,.button-upload:visited{ color: #fff; }
+.button-upload:hover{ text-decoration: none; }
+
+/* 链接 */
+a.blue:link, a.blue:visited, .blue{ color: #005eae; }
+a.blue:hover{ text-align: center; }
+
+/* 弹窗遮罩 */
+.shade{ position: fixed; left: 0; top: 0; z-index: 99999; width: 100%; height: 100%; background: rgba(0,0,0, .7); }
+.close-popup{ position: absolute; right: 10px; top: 10px; width: 24px; height: 24px; cursor: pointer; }
+.close-popup img{ transition: transform 0.2s; }
+.close-popup:hover img{ transform: rotate(90deg); }
+
+/* 分页 */
+.page{ margin: 50px 0; text-align: center; }
+.page input,.page button{ outline: none; }
+
+/* 页面样式
+----------------------------------------------------------------------------- */
+/* 页眉 */
+.header { height: 88px; border-bottom: 2px solid #0560a7; }
+.admin-logo{ margin: 20px 0 0; }
+.admin-name { float: left; padding: 6px 0 0 14px; margin: 29px 0 0 10px; border-left: 1px solid #ddd; }
+.topbar-right { font-size: 12px; line-height: 88px; color: #5e6883; }
+.lock:link, .lock:visited, .exit:link, .exit:visited{ color: #58627e; }
+.welcome a:link, .welcome a:visited { color: #007ae1; }
+.lock { margin: 0 15px; }
+.lock:hover, .welcome a:hover { text-decoration: underline; }
+.lock img { margin: -4px 5px 0 0; vertical-align: middle; }
+.exit { float: right; width: 68px; margin: 29px 0 0; height: 28px; line-height: 28px; text-align: center; border-radius: 2px; border: 1px solid #dbdbdb; transition: border-color 0.2s, box-shadow 0.2s; }
+.exit:hover { border-color: #ff7e00; box-shadow: 0 0 4px 0 #dbdbdb; text-decoration: none; }
+
+/*footer*/
+.footer{overflow: hidden;width: 100%; height: 103px; margin: 60px 0 0;font-family: "SimSun";background: #ffffff;border-top:solid 1px #ddd;min-width:1000px;font-size:12px;}
+.footer .foot{position:relative;width: 1000px;padding: 0;margin: 0 auto; text-align: center;}
+.footer-links{ float: left; padding: 26px 0 0 0; line-height: 24px; }
+.copyright{ float: left; padding: 26px 120px 26px 50px; line-height: 24px; color: #666; background: url("http://live.ofweek.com/static/web/img/110.gif") right center no-repeat; }
+.footer .foot p{ margin-left: 0; }
+.pad15{padding-top: 15px;}
+.foot-wrap{ display: inline-block; *display: inline; *zoom: 1; }
+
+/* 新页脚 */
+.footer_main{width: 100%;font: normal 12px/18px "SimSun";color: #737373;background: #ffffff;}
+.footer_main .wrapper{padding: 45px 0;text-align: center;}
+.footer_logo{ margin-right: 45px; }
+.about_us{display: inline-block;*display: inline;*zoom: 1;margin-right: 85px;text-align: center;}
+.about_us a:link,.about_us a:visited{color: #737373;text-decoration: none;}
+.about_us a:hover{color: #cc0000;text-decoration: underline;}
+
+/* 面包屑 */
+.crumb{ height: 40px; line-height: 40px; color: #666; }
+.crumb .em1{ color: #a7a7a7; }
+.crumb a:link,.crumb a:visited{ color: #1272c4; }
+.crumb a:hover{ text-decoration: underline; }
+
+/* 左菜单栏 */
+.menu{ overflow: hidden; width: 150px; padding: 0 0 50px; font-size: 14px; background: #f3f3f3; }
+.menu-parent{ margin-top: -1px; }
+.one-level{ position: relative; line-height: 50px; vertical-align: top; color: #303131; border-top: 1px solid #dbdbdb; cursor: pointer; background: url(../img/one_level_arrow.png) 125px -50px no-repeat; }
+.no-child{ background: none; }
+.one-level img{ margin: 0 5px 0 12px; vertical-align: middle; }
+.menu-son{ overflow: hidden; display: none; margin: -10px 0 10px; background-color: #f3f3f3; transition: height 0.2s; }
+.two-level{ line-height: 30px; vertical-align: top; cursor: pointer; }
+.two-level a{ display: block; padding: 0 0 0 40px; transition: background-color 0.1s; }
+.two-level a:hover{ background-color: #ebebeb; text-decoration: none; }
+.menu-son-cur a, .menu-son-cur a:hover{ color: #fff; background: url(../img/menu_son_cur.png) right center no-repeat #f3f3f3; }
+.menu-cur{ background-position: 125px 0; } /* 当前项的图标显示 */
+.menu-cur .menu-son{ display: block; } /* 当前项的二级菜单显示 */
+.menu-active .ol-title{ color: #0560a7; }
+
+/* ----- 下载资料管理 ----- */
+.page-title{ padding: 8px 0 0; font: bold 18px/35px "Microsoft Yahei"; color: #333; }
+.tips{ margin-top: -2px; color: #999; line-height: 18px; }
+/* 表格 */
+.table th{ height: 40px; font-size: 13px; line-height: 40px; border-top: 1px solid #dbdbdb; background: #f3f3f3; }
+.table td{ padding: 8px 0; line-height: 18px; border-bottom: 1px dashed #dbdbdb; }
+.table tr:hover td{ background: #f9f9f9; }
+.not-pass, .pass, .wait-pass{ display: inline-block; *display: inline; *zoom: 1; width: 5em; padding: 0 .5em; text-align: center; color: #fff; background: #ff0000; }
+.pass{ background: #5ea000; }
+.wait-pass{ background: #999; }
+.checkbox-a{ width: 15px; height: 15px; padding: 0; vertical-align: middle; border: 1px solid #ccc; background: #fff; }
+
+/* ----- 上传资料 ----- */
+.upload-container{ padding: 20px 0 0; border-top: 1px solid #dbdbdb; }
+.upc-box{ margin: 20px 0 0; }
+.upc-box dt{ float: left; width: 140px; padding: 0 10px 0 0; text-align: right; line-height: 30px; font-size: 14px; }
+.upc-box dd{ float: left; font-size: 14px;width:680px\9; }
+.upc-btn{ margin: 3px 0 0; font-size: 14px; }
+.upc-tips{ margin-top: 15px; }
+.upc-name{ width: 240px; height: 18px; padding: 5px; line-height: 18px; border: 1px solid #ccc; outline: none; }
+.upc-save{ margin: 20px 0 0 150px; font-size: 14px; }
+
+/* ----- 视频管理 ----- */
+.upload-viedo{ background: url(../img/btn_upload_video.png) center no-repeat; }
+.solution{ position: relative; padding: 5px 0 5px 25px; color: #ff7e00; line-height: 20px; background: url(../img/solution.png) 0 5px no-repeat; cursor: pointer; }
+.solution-detail{ display: none; position: absolute; left: -230px; bottom: 29px; width: 330px; padding: 10px 15px; color: #333; border-radius: 5px; border: 1px solid #e3b76e; background: #ffffcd; cursor: auto; }
+.solution:hover .solution-detail{ display: block; }
+/* 上传视频 */
+.upload-view{ overflow: hidden; width: 160px; height: 90px; text-align: center; font-size: 0; border: 1px solid #ccc; }
+.upload-view img{ max-width: 100%; max-height: 100%; vertical-align: middle; }
+.upload-view:after{ display: inline-block; *display: inline; *zoom: 1; width: 1px; height: 100%; margin-right: -1px; content: ""; vertical-align: middle; }
+.upv-btn{ font-size: 14px; }
+.upv-r .tips{ margin: 5px 0 0; font-size: 12px; line-height: 16px; }
+
+/* ----- PPT管理 ----- */
+.upload-ppt{ background: url(../img/btn_upload_ppt.png) center no-repeat; }
+.upc-ppt{ margin: 50px 0 0; }
+
+/* ----- 管理直播 ----- */
+.manage-live .button-a{ padding: 0 .6em; }
+.live-end, .live-end:hover{ color: #8b8b8b; cursor: text; }
+.no-live{ padding: 0 0 0 40px; margin: 50px 0 0; font-size: 14px; text-align: center; line-height: 33px; color: #0560a7; background: url(../img/icon_plaint.png) 220px center no-repeat; }
+/* 直播资料 */
+.live-data{ padding: 0 140px 80px; border-bottom: 1px solid #dbdbdb; }
+.button-add{ background: url(../img/btn_add.png) center no-repeat; }
+.live-data-add{ float: left; margin: 3px 0 0 20px; }
+.add-download th{ font-size: 12px; font-weight: bold; background: none; border-bottom: 1px dashed #dbdbdb; }
+.th-sort{ text-indent: 1.3em; }
+.input-sort{ width: 50px; height: 22px; padding: 0; text-align: center; border: 1px solid #999; box-shadow: 0 0 3px #ccc inset; outline: none; }
+.live-data-back:link,.live-data-back:visited{ margin: 30px auto 0; color: #333; background: #eeeeef; }
+a.live-data-back:hover{ background: #f4f4f4; }
+/* 弹窗：选择资料 */
+.add-data-popup{ display: none; position: fixed; width: 550px; padding: 5px 0 50px; background: #fff; border: 1px solid #ccc; box-shadow: 0 0 100px #000; }
+.adp-hd{ height: 43px; padding: 0 0 0 20px; }
+.adp-tips{ margin: 30px 0 40px; text-align: center; font-size: 14px; color: #666; }
+.adp-bd{ margin: 10px 0 0; }
+.adp-bd .not-pass{ margin: 0 0 0 10px; }
+.adp-submit{ margin: 20px 0 0 20px; }
+
+/* ----- 帐号管理 ----- */
+.service-photo{ margin: 0 0 0 22px; }
+.service-name{ margin: 0 0 0 5px; vertical-align: middle; }
+td.setSer-handle{ padding: 0 0 0 20px; }
+.setSer-handle .button-a{ padding: 0 1em; margin: 0 3px; }
+.account-container{ padding: 20px 0 0; border-top: 1px solid #dbdbdb; }
+.acc-tips{ margin: 0 0 0 20px; font-size: 14px; line-height: 30px; }
+.acc-btn{ margin: 3px 0 0; font-size: 14px; }
+.error-tips{ color: #ff0000; }
+/* 帐号安全 */
+.account-state{ margin: 4px 20px 0; }
+.acc-suc{ margin: 30px 0 0 100px; font-size: 14px; }
+.acc-suc span{ margin: 0 0 0 10px; vertical-align: middle; }
+
+/* ----- 数据报告 ----- */
+.page-title-min{ margin: 0 0 0 15px; font: normal 14px/100% SimSun; }
+.query-input{ width: 220px; vertical-align: top; }
+.query-select{ display: inline; height: 30px; margin: 0 5px; border: 1px solid #ccc; outline: none; vertical-align: top; }
+.query-submit{ height: 30px; padding: 0 1em; line-height: 30px; border-radius: 3px; vertical-align: top; }
+.data-table td.align-left{ padding: 0 10px; word-break:break-all }
+/* 弹窗：查看观众 */
+.popup-top-red{ display: none; position: fixed; left: 50%; top: 100px; width: 400px; margin-left: -200px; background: #fff; border: 1px solid #dbdbdb; border-top: 2px solid #0560a7; }
+.pop-tr-hd{ height: 50px; font: normal 16px/50px "Microsoft Yahei"; text-align: center; background: #f3f3f3; }
+.pop-tr-bd ul{ padding: 10px 0 0 80px; font-size: 14px; }
+.pop-tr-bd li{ margin: 15px 0 0; vertical-align: top; }
+.pop-tr-bd li span{ width: 200px; padding: 0 0 0 10px; }
+.pop-tr-close{ display: block; margin: 30px auto; }
+/* 聊天观众 */
+.see-all-chat{ font: normal 12px/100% SimSun; }
+.all-chat-input{ overflow-y: auto; width: 288px; height: 68px; padding: 3px 5px; margin: 0 auto; text-align: left; vertical-align: top; resize: vertical; border: 1px solid #ccc; background: #fff; outline: none; }
+
+/* ----- 聊天记录 ----- */
+.chat-record-tab{ overflow: hidden; width: 828px; border-top: 1px solid #dbdbdb; border-left: 1px solid #dbdbdb; }
+.chat-record-tab a{ float: left; width: 275px; height: 39px; font-size: 14px; line-height: 39px; text-align: center; border-right: 1px solid #dbdbdb; border-bottom: 1px solid #dbdbdb; transition: background 0.2s; }
+.chat-record-tab a:link,.chat-record-tab a:visited{ background: #eeeeee; }
+.chat-record-tab a:hover, .chat-record-tab a.current{ color: #fff; font-weight: bold; background: #aaa; text-decoration: none; }
+.chat-record-tab a.current{ background: #0560a7; }
+.chat-rt{ display: none; width: 828px; height: 25px; color: #868686; font-size: 12px; line-height: 25px; text-align: center; background: url(../img/chat_rt.png) 445px 0 no-repeat #f3f3f3; cursor: pointer; }
+.chat-rt-off{ background-position: 445px -25px; }
+.chat-content li{ padding: 15px; line-height: 18px; word-break: break-all; border-bottom: 1px dashed #dbdbdb; }

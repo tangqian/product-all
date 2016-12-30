@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.sys.dao.AsyncTaskDao">
+
+	<select id="get" resultType="AsyncTask">
+		SELECT
+			*
+		FROM sys_async_task
+		WHERE ID = #{id}
+	</select>
+
+	<select id="findList" resultType="AsyncTask">
+		SELECT
+			*
+		FROM sys_async_task
+		WHERE 1 = 1
+		<if test="name != null and name != ''">
+			AND	IFNULL(name,'') LIKE CONCAT('%', #{name}, '%')
+		</if>
+		<if test="type != null">
+			AND	type = #{type}
+		</if>
+		<if test="status != null">
+			AND status = ${status}
+		</if>
+		ORDER BY id DESC
+	</select>
+
+	<select id="findAllList" resultType="AsyncTask">
+		SELECT
+			*
+		FROM sys_async_task
+		ORDER BY id DESC
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_async_task (
+			id,
+			name,
+			type,
+			status,
+			result_message,
+			create_by,
+			create_date,
+			update_date,
+			update_by,
+			execute_time,
+			param
+		) VALUES (
+			#{id},
+			#{name},
+			#{type},
+			#{status},
+			#{resultMessage},
+			#{createBy},
+			#{createDate},
+			#{updateDate},
+			#{updateBy},
+			#{executeTime},
+			#{param}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_async_task
+		<set>
+			<if test="name != null">name = #{name},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="resultMessage != null">result_message = #{resultMessage},</if>
+			<if test="executeTime != null">execute_time = #{executeTime},</if>
+			<if test="param != null">param = #{param},</if>
+			<if test="updateDate != null">update_date = #{updateDate},</if>
+			<if test="updateBy != null">update_by = #{updateBy}</if>
+		</set>
+		WHERE
+		ID = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM sys_async_task
+		WHERE id = #{id}
+	</update>
+
+	<select id="countUnendTask" resultType="_int">
+		SELECT
+			COUNT(*)
+		FROM
+			sys_async_task
+		WHERE type = #{type}
+		AND status IN (0, 1)
+	</select>
+	
+</mapper>
