@@ -100,6 +100,14 @@ public class PictureCompressionUtils {
 			if(convert2Rgb(srcFile)){
 				result = equalRatioSize(srcFile, targetFile, width, height);
 			}
+		} catch (IllegalArgumentException e) {//处理java.lang.IllegalArgumentException: Numbers of source Raster bands and source color space components do not match
+			logger.error("针对ICC profile进行处理", e);
+			logger.error("预期图片压缩会失败,故直接复制,srcImgPath={}", srcFile.getAbsolutePath());
+			try {
+				FileUtils.copyFile(srcFile, targetFile);
+			} catch (IOException e1) {
+			}
+			result = true;
 		} catch (IOException e) {
 			logger.error("图片压缩失败, 获取BufferedImage信息异常", e);
 		}
